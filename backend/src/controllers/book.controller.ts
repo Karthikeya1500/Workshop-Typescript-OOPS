@@ -1,10 +1,6 @@
 import { Request, Response } from 'express';
 import { BookService } from '../services/book.service';
 
-/**
- * Interface defining the contract for Book Controller methods
- * Ensures all HTTP handlers are properly typed
- */
 interface IBookController {
     createBook(req: Request, res: Response): Promise<void>;
     getAllBooks(req: Request, res: Response): Promise<void>;
@@ -14,10 +10,6 @@ interface IBookController {
     searchBooks(req: Request, res: Response): Promise<void>;
 }
 
-/**
- * BookController class - Handles HTTP requests and responses for Book operations
- * Implements the Controller Layer pattern for handling API endpoints
- */
 export class BookController implements IBookController {
     private bookService: BookService;
 
@@ -25,16 +17,10 @@ export class BookController implements IBookController {
         this.bookService = new BookService();
     }
 
-    /**
-     * POST /api/books - Creates a new book
-     * @param req - Express request object containing book data in body
-     * @param res - Express response object
-     */
     createBook = async (req: Request, res: Response): Promise<void> => {
         try {
             const bookData = req.body;
 
-            // Validate required fields
             if (!bookData.title || !bookData.author || !bookData.isbn) {
                 res.status(400).json({
                     success: false,
@@ -59,11 +45,6 @@ export class BookController implements IBookController {
         }
     };
 
-    /**
-     * GET /api/books - Retrieves all books
-     * @param req - Express request object
-     * @param res - Express response object
-     */
     getAllBooks = async (req: Request, res: Response): Promise<void> => {
         try {
             const books = await this.bookService.getAllBooks();
@@ -83,11 +64,6 @@ export class BookController implements IBookController {
         }
     };
 
-    /**
-     * GET /api/books/:id - Retrieves a single book by ID
-     * @param req - Express request object containing book ID in params
-     * @param res - Express response object
-     */
     getBookById = async (req: Request, res: Response): Promise<void> => {
         try {
             const { id } = req.params;
@@ -124,11 +100,6 @@ export class BookController implements IBookController {
         }
     };
 
-    /**
-     * PUT /api/books/:id - Updates an existing book
-     * @param req - Express request object containing book ID in params and update data in body
-     * @param res - Express response object
-     */
     updateBook = async (req: Request, res: Response): Promise<void> => {
         try {
             const { id } = req.params;
@@ -142,7 +113,6 @@ export class BookController implements IBookController {
                 return;
             }
 
-            // Prevent updating certain fields
             delete updateData._id;
             delete updateData.createdAt;
             delete updateData.updatedAt;
@@ -171,11 +141,6 @@ export class BookController implements IBookController {
         }
     };
 
-    /**
-     * DELETE /api/books/:id - Deletes a book
-     * @param req - Express request object containing book ID in params
-     * @param res - Express response object
-     */
     deleteBook = async (req: Request, res: Response): Promise<void> => {
         try {
             const { id } = req.params;
@@ -212,11 +177,6 @@ export class BookController implements IBookController {
         }
     };
 
-    /**
-     * GET /api/books/search?q=query - Searches for books by title or author
-     * @param req - Express request object containing search query in query params
-     * @param res - Express response object
-     */
     searchBooks = async (req: Request, res: Response): Promise<void> => {
         try {
             const { q } = req.query;
@@ -246,11 +206,6 @@ export class BookController implements IBookController {
         }
     };
 
-    /**
-     * GET /api/books/genre/:genre - Gets books by genre
-     * @param req - Express request object containing genre in params
-     * @param res - Express response object
-     */
     getBooksByGenre = async (req: Request, res: Response): Promise<void> => {
         try {
             const { genre } = req.params;
@@ -280,11 +235,6 @@ export class BookController implements IBookController {
         }
     };
 
-    /**
-     * GET /api/books/stock/available - Gets all in-stock books
-     * @param req - Express request object
-     * @param res - Express response object
-     */
     getInStockBooks = async (req: Request, res: Response): Promise<void> => {
         try {
             const books = await this.bookService.getInStockBooks();
